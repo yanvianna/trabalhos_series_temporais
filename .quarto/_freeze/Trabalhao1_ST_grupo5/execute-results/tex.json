@@ -1,0 +1,16 @@
+{
+  "hash": "3d8b38b55a603b04088ec46e5d0c36d5",
+  "result": {
+    "markdown": "---\ntitle: \"Trabalho Prático 1\"\nsubtitle: \"Análise de Séries Temporais - 1/2023\" \nauthor:\n  - Ana Theresa Figueiredo - 18/0116088\n  - César Augusto Galvão - 19/0011572\nformat: \n  pdf:\n    toc: true\n    keep-tex: true\n    include-in-header:\n      text: |\n        \\usepackage[auth-lg]{authblk}\nexecute:\n  echo: false\n  message: false\n  warning: false\n---\n\n{{< pagebreak >}}\n\n\n\n\n\n# Introdução\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n\nA série temporal escolhida foi a de número *id* correspondente a 2546. De acordo com a implementação do próprio pacote, refere-se a Large commercial banks, commercial & industrial loans, ou seja, dados financeiros e de impréstimos industriais e comerciais. Foram realizadas medidas mensais de 1983 a 1992 e o horizonte de previsão requerido é das 18 ocorrências seguintes.\n\nO gráfico da série, com *in* e *out-sample*, é exposto a seguir.\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](Trabalhao1_ST_grupo5_files/figure-pdf/plot-serie-total-1.pdf)\n:::\n:::\n\n\n\n\n\n\n## a. Decomposição da série temporal via STL (ou MSTL).\n\n\n::: {.cell}\n\n:::\n\n\n- Comente sobre o que foi observado na série e na decomposição.\n\n\n## b. Escolha um modelo ARIMA adequado de forma manual.\n\n -  O modelo selecionado deve ser baseado no que você visualizou na decomposição, testes\nestatísticos, gráficos ACF, gráficos PACF, critérios de parcimonia e resíduos;\n - Detalhe todo o procedimento da escolha do modelo;\n - Nao pode usar AutoArima\n - Tem q fazer o algorito mostrado em sala. \n\n\n## c. Análise de resíduos do modelo selecionado. \n\n- Inclua gráficos e testes estatísticos;\n-  Comente sobre os resultados;\n\n## d. Apresente a equação do modelo selecionado.\n\n-  Utilize a estimava dos parâmetros. Exemplo: o modelo selecionado é um AR(1) definido como\nxt = 0.5xt−1 + εt, t = 1, 2, 3, . . ., em que {εt} é um processo i.i.d. Normal(0, 3);\n\n## e. No final do relatório, inclua como um apêndice o código do R que foi utilizado.\n\n- copia r os chucks com echo=T no fim",
+    "supporting": [
+      "Trabalhao1_ST_grupo5_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": null,
+    "postProcess": false
+  }
+}
