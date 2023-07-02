@@ -1,9 +1,10 @@
 ---
-title: "Trabalho Prático 1"
+title: "Trabalho Prático 2"
 subtitle: "Análise de Séries Temporais - 1/2023" 
 author:
-  - Ana Theresa Figueiredo - 18/0116088
+  - Ana Carolina Vianna - */*
   - César Augusto Galvão - 19/0011572
+  - Yan Flávio Vianna - */*
 format: 
   pdf:
     toc: true
@@ -22,10 +23,15 @@ execute:
 # Introdução
 
 ```{r pacotes}
+if(!("pacman" %in% installed.packages())){install.packages("pacman")}
+
 pacman::p_load(Mcomp, tidyverse, forecast, fpp2, xts, tseries, tidymodels)
 ```
 
 ```{r selecao-dados}
+# T2 -> 2169 ou 2183
+
+
 data(M3) #carrega os dados
 id <- 2546 #série temporal escolhida
 
