@@ -39,11 +39,8 @@ serie <- M3[[id]]
 dados <- serie$x
 ```
 
--------ALTERAR ---------------  
 
-A série temporal escolhida foi a de número *id* correspondente a `r id`. De acordo com a definição do próprio pacote, refere-se a *`r serie$description`*, ou seja, dados financeiros e de empréstimos industriais e comerciais. Foram realizadas medidas mensais de 1983 a 1992 e o horizonte de previsão requerido é das 18 ocorrências seguintes.  
-
---------------------------  
+A série temporal escolhida foi a de número *id* correspondente a `r id`. De acordo com a definição do próprio pacote, refere-se a *`r serie$description`*. Foram realizadas medidas mensais de 1983 a 1992 e o horizonte de previsão requerido é das 18 ocorrências seguintes.  
 
 O gráfico da série, com *in* e *out-sample*, é exposto a seguir.
 
@@ -52,6 +49,32 @@ O gráfico da série, com *in* e *out-sample*, é exposto a seguir.
 plot(serie, main = "Série Temporal M3-2183")
 
 ```
+
+A série aparenta ter dois períodos, pelo menos: um ciclo anual e outro que compreende um período maior. No entanto, ao se tentar decompor a série com múltiplas sazonalidades, obté-se o seguinte:
+
+* **Adicionando uma componente sazonal com ciclo menor que 1 ano** -- uma das componentes sazonais apresenta heteroscedasticidade;
+* **Adicionando uma componente sazonal com ciclo maior que 1 ano** -- resíduos apresentam periodicidade ou heteroscedasticidade.
+
+Optou-se portanto pela decomposição STL apenas com a sazonalidade anual, mas fica evidente que esta decomposição não é adequada quando se avalia a componente de tendência. A decomposição é exposta a seguir.  
+
+
+
+```{r decomposicao-mstl}
+
+serie_ms <- forecast::msts(dados, seasonal.periods = c(12))
+# media dos resíduos é em torno de 5. Considerando a magnitude dos dados que temos usando summary(dados), está próximo de zero o suficiente
+
+#tentei períodos secundários, porém o melhor ajuste é com apenas um ciclo anual. Só é possível dois ciclos secundários completos para análise até quadrienal, mas até aí todos apresentam resíduos inadequados. 
+
+decomp_mstl <- mstl(serie_ms, lambda = NULL)
+
+#ajustar com lambda = "auto" até agora não parece fazer qualquer diferença
+
+decomp_mstl %>% autoplot(main = "Decomposição MSTL com período anual simples")
+
+```
+
+
 
 # Modelos ARIMA: seleção, transformações e resíduos
 

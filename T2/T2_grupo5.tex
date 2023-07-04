@@ -203,7 +203,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, interior hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, interior hidden, boxrule=0pt, breakable, sharp corners, frame hidden, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -217,21 +217,36 @@
 \section{Introdução: série selecionada, características e
 decomposição}\label{introduuxe7uxe3o-suxe9rie-selecionada-caracteruxedsticas-e-decomposiuxe7uxe3o}}
 
--------ALTERAR ---------------
-
 A série temporal escolhida foi a de número \emph{id} correspondente a
 2183. De acordo com a definição do próprio pacote, refere-se a
-\emph{Fluid power shipments - hydraulic index}, ou seja, dados
-financeiros e de empréstimos industriais e comerciais. Foram realizadas
-medidas mensais de 1983 a 1992 e o horizonte de previsão requerido é das
-18 ocorrências seguintes.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\emph{Fluid power shipments - hydraulic index}. Foram realizadas medidas
+mensais de 1983 a 1992 e o horizonte de previsão requerido é das 18
+ocorrências seguintes.
 
 O gráfico da série, com \emph{in} e \emph{out-sample}, é exposto a
 seguir.
 
 \includegraphics{T2_grupo5_files/figure-pdf/plot-serie-total-1.pdf}
+
+A série aparenta ter dois períodos, pelo menos: um ciclo anual e outro
+que compreende um período maior. No entanto, ao se tentar decompor a
+série com múltiplas sazonalidades, obté-se o seguinte:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Adicionando uma componente sazonal com ciclo menor que 1 ano}
+  -- uma das componentes sazonais apresenta heteroscedasticidade;
+\item
+  \textbf{Adicionando uma componente sazonal com ciclo maior que 1 ano}
+  -- resíduos apresentam periodicidade ou heteroscedasticidade.
+\end{itemize}
+
+Optou-se portanto pela decomposição STL apenas com a sazonalidade anual,
+mas fica evidente que esta decomposição não é adequada quando se avalia
+a componente de tendência. A decomposição é exposta a seguir.
+
+\includegraphics{T2_grupo5_files/figure-pdf/decomposicao-mstl-1.pdf}
 
 \hypertarget{modelos-arima-seleuxe7uxe3o-transformauxe7uxf5es-e-resuxedduos}{%
 \section{Modelos ARIMA: seleção, transformações e
