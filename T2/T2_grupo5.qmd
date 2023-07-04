@@ -84,7 +84,7 @@ COMENTAR
 ndiffs(serie_ms)
 serie_ms %>% diff() %>% nsdiffs()
 
-serie_ms <- serie_ms %>% diff() %>% diff(lag = 12)
+serie_ms_diff <- serie_ms %>% diff() %>% diff(lag = 12)
 ```
 
 ```{r testes}
