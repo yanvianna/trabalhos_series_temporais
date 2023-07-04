@@ -58,15 +58,15 @@ A série aparenta ter dois períodos, pelo menos: um ciclo anual e outro que com
 Optou-se portanto pela decomposição STL apenas com a sazonalidade anual, mas fica evidente que esta decomposição não é adequada quando se avalia a componente de tendência. A decomposição é exposta a seguir.  
 
 
-
 ```{r decomposicao-mstl}
 
 serie_ms <- forecast::msts(dados, seasonal.periods = c(12))
+
 # media dos resíduos é em torno de 5. Considerando a magnitude dos dados que temos usando summary(dados), está próximo de zero o suficiente
 
 #tentei períodos secundários, porém o melhor ajuste é com apenas um ciclo anual. Só é possível dois ciclos secundários completos para análise até quadrienal, mas até aí todos apresentam resíduos inadequados. 
 
-decomp_mstl <- mstl(serie_ms, lambda = NULL)
+decomp_mstl <- mstl(serie_ms, lambda = NULL, t.window = 9)
 
 #ajustar com lambda = "auto" até agora não parece fazer qualquer diferença
 
@@ -74,6 +74,23 @@ decomp_mstl %>% autoplot(main = "Decomposição MSTL com período anual simples"
 
 ```
 
+COMENTAR
+- para que serve diff normal e sazonal
+- o que conseguimos depois de aplicar
+- teste de estacionariedade
+- deixar pronto para a modelagem
+
+```{r diff-acf-pacf}
+ndiffs(serie_ms)
+serie_ms %>% diff() %>% nsdiffs()
+
+serie_ms <- serie_ms %>% diff() %>% diff(lag = 12)
+```
+
+```{r testes}
+#kpss estacionariedade
+
+```
 
 
 # Modelos ARIMA: seleção, transformações e resíduos
