@@ -177,7 +177,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden, interior hidden, breakable, enhanced, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden, breakable, enhanced, sharp corners]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -241,6 +241,25 @@ modelagem
 \begin{verbatim}
 [1] 1
 \end{verbatim}
+
+\includegraphics{T2_grupo5_files/figure-pdf/acf-pacf-1.pdf}
+
+\begin{verbatim}
+ non-finite finite-difference value [1] 
+\end{verbatim}
+
+\begin{verbatim}
+[1] 1380.949
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Construção do modelo
+\end{itemize}
+
+O modelo selecionado foi ARIMA(2,1,2)x(0,1,2) para a série original e
+com transformação de Box-Cox.
 
 \begin{itemize}
 \tightlist

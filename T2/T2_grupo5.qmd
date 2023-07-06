@@ -99,6 +99,42 @@ serie_ms %>% diff() %>% nsdiffs()
 serie_ms_diff <- serie_ms %>% diff() %>% diff(lag = 12)
 ```
 
+```{r acf-pacf}
+# Graficos de Autocorrelacao
+par(mfrow=c(1,3))
+plot(serie_ms_diff, main="Série com diferenças",ylab="")
+acf(serie_ms_diff, lag=12*6, main="ACF")
+pacf(serie_ms_diff, lag=12*6, main="PACF")
+```
+
+```{r aicc}
+melhor_AICc <- Inf
+for(p in 0:2){
+  for(q in 0:2){
+    for(P in 0:2){
+      for(Q in 0:2){
+        
+        #cat("p =",p,", q =",q,", P =",P,", Q =",Q,"\n")
+        
+        tryCatch({fit <- Arima(serie_ms, order=c(p,1,q), seasonal=c(P,1,Q))}, error=function(e){cat("",conditionMessage(e), "\n")})
+        
+        if(fit$aicc <= melhor_AICc){
+          melhor_AICc <- fit$aicc
+          #cat("p =",p,", q =",q,", P =",P,", Q =",Q,", AICc =",fit$aicc,"\n")
+          }
+        
+      }
+    }
+  }
+}
+
+melhor_AICc
+```
+
+-   Construção do modelo
+
+O modelo selecionado foi ARIMA(2,1,2)x(0,1,2) para a série original e com transformação de Box-Cox.
+
 ```{r testes}
 #kpss estacionariedade
 
