@@ -52,46 +52,6 @@
   \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{241,243,245}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
-\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
-\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
@@ -118,6 +78,20 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage[auth-lg]{authblk}
 \KOMAoption{captions}{tableheading}
 \makeatletter
@@ -203,7 +177,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, interior hidden, boxrule=0pt, breakable, sharp corners, frame hidden, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden, interior hidden, breakable, enhanced, sharp corners]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -242,19 +216,131 @@ série com múltiplas sazonalidades, obté-se o seguinte:
   -- resíduos apresentam periodicidade ou heteroscedasticidade.
 \end{itemize}
 
-Optou-se portanto pela decomposição STL apenas com a sazonalidade anual,
-mas fica evidente que esta decomposição não é adequada quando se avalia
-a componente de tendência. A decomposição é exposta a seguir.
+Optou-se portanto pela decomposição STL (apesar de os dados terem
+inicialmente formado um objeto \texttt{msts}) apenas com a sazonalidade
+anual, mas fica evidente que esta decomposição não é adequada quando se
+avalia a componente de tendência, que aparenta ainda carregar algum
+componente periódico. Os resíduos aparentam um comportamento aleatório e
+têm média -0.104, o que é próximo de zero o suficiente considerando a
+magnitude dos dados da série. A decomposição é exposta a seguir.
 
-\includegraphics{T2_grupo5_files/figure-pdf/decomposicao-mstl-1.pdf}
+\includegraphics{T2_grupo5_files/figure-pdf/grafico-mstl-1.pdf}
 
 \hypertarget{modelos-arima-seleuxe7uxe3o-transformauxe7uxf5es-e-resuxedduos}{%
 \section{Modelos ARIMA: seleção, transformações e
 resíduos}\label{modelos-arima-seleuxe7uxe3o-transformauxe7uxf5es-e-resuxedduos}}
 
+COMENTAR - para que serve diff normal e sazonal - o que conseguimos
+depois de aplicar - teste de estacionariedade - deixar pronto para a
+modelagem
+
+\begin{verbatim}
+[1] 1
+\end{verbatim}
+
+\begin{verbatim}
+[1] 1
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  ACf e PACF
+\item
+  Construção do modelo
+\item
+  Resíduos
+\end{itemize}
+
 \hypertarget{modelos-ets-seleuxe7uxe3o-transformauxe7uxf5es-e-resuxedduos}{%
 \section{Modelos ETS: seleção, transformações e
 resíduos}\label{modelos-ets-seleuxe7uxe3o-transformauxe7uxf5es-e-resuxedduos}}
+
+\hypertarget{modelo-sem-transformauxe7uxe3o}{%
+\subsection{Modelo sem
+transformação}\label{modelo-sem-transformauxe7uxe3o}}
+
+\hypertarget{seleuxe7uxe3o}{%
+\subsubsection{Seleção}\label{seleuxe7uxe3o}}
+
+\begin{longtable*}{lccc}
+\toprule
+Modelo & AIC & AICc & BIC\\
+\midrule
+\endfirsthead
+\multicolumn{4}{@{}l}{\textit{(continued)}}\\
+\toprule
+Modelo & AIC & AICc & BIC\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+\cellcolor{gray!15}{ETS(M,Ad,M)} & \cellcolor{gray!15}{1761.30} & \cellcolor{gray!15}{1768.36} & \cellcolor{gray!15}{1810.87}\\
+ETS(M,M,M) & 1761.94 & 1769.00 & 1811.51\\
+\cellcolor{gray!15}{ETS(Ad,A,A)} & \cellcolor{gray!15}{1764.25} & \cellcolor{gray!15}{1771.30} & \cellcolor{gray!15}{1813.81}\\
+ETS(M,Ad,A) & 1767.73 & 1774.78 & 1817.29\\
+\cellcolor{gray!15}{ETS(M,A,M)} & \cellcolor{gray!15}{1769.04} & \cellcolor{gray!15}{1775.29} & \cellcolor{gray!15}{1815.86}\\
+ETS(A,A,A) & 1771.20 & 1777.44 & 1818.01\\
+\cellcolor{gray!15}{ETS(M,A,A)} & \cellcolor{gray!15}{1774.56} & \cellcolor{gray!15}{1780.81} & \cellcolor{gray!15}{1821.38}\\
+ETS(M,M,M) & 1781.06 & 1787.30 & 1827.87\\
+\cellcolor{gray!15}{ETS(A,N,A)} & \cellcolor{gray!15}{1812.26} & \cellcolor{gray!15}{1817.06} & \cellcolor{gray!15}{1853.56}\\
+ETS(M,N,M) & 1827.18 & 1831.98 & 1868.48\\*
+\end{longtable*}
+
+\includegraphics{T2_grupo5_files/figure-pdf/melhor-fit-ETL-sem-transf-1.pdf}
+
+\hypertarget{resuxedduos}{%
+\subsubsection{Resíduos}\label{resuxedduos}}
+
+\hypertarget{modelo-com-transformauxe7uxe3o}{%
+\subsection{Modelo com
+transformação}\label{modelo-com-transformauxe7uxe3o}}
+
+\hypertarget{seleuxe7uxe3o-1}{%
+\subsubsection{Seleção}\label{seleuxe7uxe3o-1}}
+
+a série com transformacao
+
+\includegraphics{T2_grupo5_files/figure-pdf/ETS-com-transf-1.pdf}
+
+decomposicao
+
+\includegraphics{T2_grupo5_files/figure-pdf/decomposicao-ets-com-transformacao-1.pdf}
+
+selecao do modelo com transformação
+
+\begin{longtable*}{lccc}
+\toprule
+Modelo transformado & AIC & AICc & BIC\\
+\midrule
+\endfirsthead
+\multicolumn{4}{@{}l}{\textit{(continued)}}\\
+\toprule
+Modelo transformado & AIC & AICc & BIC\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+\cellcolor{gray!15}{ETS(M,Ad,M)} & \cellcolor{gray!15}{1761.30} & \cellcolor{gray!15}{1768.36} & \cellcolor{gray!15}{1810.87}\\
+ETS(M,M,M) & 1761.94 & 1769.00 & 1811.51\\
+\cellcolor{gray!15}{ETS(Ad,A,A)} & \cellcolor{gray!15}{1764.25} & \cellcolor{gray!15}{1771.30} & \cellcolor{gray!15}{1813.81}\\
+ETS(M,Ad,A) & 1767.73 & 1774.78 & 1817.29\\
+\cellcolor{gray!15}{ETS(M,A,M)} & \cellcolor{gray!15}{1769.04} & \cellcolor{gray!15}{1775.29} & \cellcolor{gray!15}{1815.86}\\
+ETS(A,A,A) & 1771.20 & 1777.44 & 1818.01\\
+\cellcolor{gray!15}{ETS(M,A,A)} & \cellcolor{gray!15}{1774.56} & \cellcolor{gray!15}{1780.81} & \cellcolor{gray!15}{1821.38}\\
+ETS(M,M,M) & 1781.06 & 1787.30 & 1827.87\\
+\cellcolor{gray!15}{ETS(A,N,A)} & \cellcolor{gray!15}{1812.26} & \cellcolor{gray!15}{1817.06} & \cellcolor{gray!15}{1853.56}\\
+ETS(M,N,M) & 1827.18 & 1831.98 & 1868.48\\*
+\end{longtable*}
+
+OS MODELOS SAO OS MESMO, PODEMO SELECIONAR O SEGUNDO MELHOR
+
+\hypertarget{resuxedduos-1}{%
+\subsubsection{Resíduos}\label{resuxedduos-1}}
 
 \hypertarget{estudo-de-desempenho-preditivo}{%
 \section{Estudo de desempenho
@@ -287,92 +373,6 @@ objetivo;
 
 Todo o projeto de composição deste documento pode ser encontrado aqui:
 https://github.com/cesar-galvao/trabalhos\_series
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(Mcomp, tidyverse, forecast, fpp2, xts, tseries, tidymodels)}
-
-\FunctionTok{data}\NormalTok{(M3) }\CommentTok{\#carrega os dados}
-\NormalTok{id }\OtherTok{\textless{}{-}} \DecValTok{2546} \CommentTok{\#série temporal escolhida}
-
-\NormalTok{serie }\OtherTok{\textless{}{-}}\NormalTok{ M3[[id]]}
-
-\NormalTok{dados }\OtherTok{\textless{}{-}}\NormalTok{ serie}\SpecialCharTok{$}\NormalTok{x}
-
-\FunctionTok{plot}\NormalTok{(serie, }\AttributeTok{main =} \StringTok{"Série Temporal M3{-}2546"}\NormalTok{)}
-
-\NormalTok{serie}\SpecialCharTok{$}\NormalTok{x }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{stl}\NormalTok{(}\AttributeTok{s.window =} \DecValTok{7}\NormalTok{, }\AttributeTok{t.window =} \DecValTok{7}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{plot}\NormalTok{(}\AttributeTok{main =} \StringTok{"Decomposição STL (LOESS)"}\NormalTok{)}
-
-\CommentTok{\#sazonalidade diaria e semanal}
-\FunctionTok{msts}\NormalTok{(serie}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{seasonal.periods =} \FunctionTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{6}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
-\CommentTok{\#janela de ajuste \textquotesingle{}Cleveland et al (1990)\textquotesingle{}}
-  \FunctionTok{mstl}\NormalTok{(., }\AttributeTok{s.window =} \DecValTok{7}\NormalTok{, }\AttributeTok{t.window =} \DecValTok{7}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{plot}\NormalTok{(}\AttributeTok{main =} \StringTok{"Decomposição MSTL"}\NormalTok{)}
-
-\NormalTok{d }\OtherTok{\textless{}{-}} \FunctionTok{ndiffs}\NormalTok{(serie}\SpecialCharTok{$}\NormalTok{x)}
-
-\NormalTok{D }\OtherTok{\textless{}{-}}\NormalTok{ serie}\SpecialCharTok{$}\NormalTok{x }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{diff}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{nsdiffs}\NormalTok{()}
-
-\CommentTok{\#aplica 2 diferenciacoes}
-\NormalTok{serie\_d }\OtherTok{\textless{}{-}}\NormalTok{ serie}\SpecialCharTok{$}\NormalTok{x }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{diff}\NormalTok{(}\AttributeTok{differences =} \DecValTok{2}\NormalTok{)}
-
-\FunctionTok{kpss.test}\NormalTok{(serie\_d)}
-
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{3}\NormalTok{))}
-\FunctionTok{plot}\NormalTok{(serie\_d)}
-\FunctionTok{acf}\NormalTok{(serie\_d, }\AttributeTok{lag.max =} \DecValTok{12}\SpecialCharTok{*}\DecValTok{7}\NormalTok{)}
-\FunctionTok{pacf}\NormalTok{(serie\_d, }\AttributeTok{lag.max =} \DecValTok{12}\SpecialCharTok{*}\DecValTok{7}\NormalTok{)}
-
-\NormalTok{parcim }\OtherTok{\textless{}{-}} \FunctionTok{character}\NormalTok{()}
-
-\NormalTok{melhor\_AICc }\OtherTok{\textless{}{-}} \ConstantTok{Inf}
-\ControlFlowTok{for}\NormalTok{(p }\ControlFlowTok{in} \DecValTok{0}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)\{}
-  \ControlFlowTok{for}\NormalTok{(q }\ControlFlowTok{in} \DecValTok{0}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)\{}
-    \ControlFlowTok{for}\NormalTok{(P }\ControlFlowTok{in} \DecValTok{0}\SpecialCharTok{:}\DecValTok{1}\NormalTok{)\{}
-      \ControlFlowTok{for}\NormalTok{(Q }\ControlFlowTok{in} \DecValTok{0}\SpecialCharTok{:}\DecValTok{1}\NormalTok{)\{}
-\NormalTok{        fit }\OtherTok{\textless{}{-}} \FunctionTok{Arima}\NormalTok{(serie}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{order =} \FunctionTok{c}\NormalTok{(p,}\DecValTok{2}\NormalTok{,q), }\AttributeTok{seasonal =} \FunctionTok{c}\NormalTok{(P, }\DecValTok{0}\NormalTok{, Q))}
-        \ControlFlowTok{if}\NormalTok{(fit}\SpecialCharTok{$}\NormalTok{aicc }\SpecialCharTok{\textless{}}\NormalTok{ melhor\_AICc)\{}
-\NormalTok{          melhor\_AICc }\OtherTok{\textless{}{-}}\NormalTok{ fit}\SpecialCharTok{$}\NormalTok{aicc}
-\NormalTok{          parcim }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(}\StringTok{"p = "}\NormalTok{,p,}\StringTok{", q = "}\NormalTok{, q, }\StringTok{", P = "}\NormalTok{, P, }\StringTok{", Q = "}\NormalTok{, Q,}
-                             \StringTok{", AICc = "}\NormalTok{, }\FunctionTok{round}\NormalTok{(fit}\SpecialCharTok{$}\NormalTok{aicc,}\DecValTok{4}\NormalTok{)),parcim)}
-\NormalTok{        \}}
-\NormalTok{      \}}
-\NormalTok{    \}}
-\NormalTok{  \}}
-\NormalTok{\}}
-
-
-
-\NormalTok{parcim}
-
-
-\NormalTok{fit }\OtherTok{\textless{}{-}} \FunctionTok{arima}\NormalTok{(serie}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{order =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{seasonal =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{), }\AttributeTok{method =} \StringTok{"CSS"}\NormalTok{)}
-
-\NormalTok{fit}\SpecialCharTok{$}\NormalTok{coef }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{tidy}\NormalTok{()}
-
-
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
-\NormalTok{E }\OtherTok{\textless{}{-}}\NormalTok{ fit}\SpecialCharTok{$}\NormalTok{residuals }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{window}\NormalTok{(}\AttributeTok{start=}\FunctionTok{c}\NormalTok{(}\DecValTok{1984}\NormalTok{,}\DecValTok{3}\NormalTok{))}
-\NormalTok{E1 }\OtherTok{\textless{}{-}}\NormalTok{ fit}\SpecialCharTok{$}\NormalTok{residuals}
-\FunctionTok{plot}\NormalTok{(E1)}
-\FunctionTok{plot}\NormalTok{(E, }\AttributeTok{main =} \StringTok{"Processo dos resíduos"}\NormalTok{)}
-
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{))}
-\FunctionTok{plot}\NormalTok{(E)}
-\FunctionTok{qqnorm}\NormalTok{(E)}
-\FunctionTok{qqline}\NormalTok{(E)}
-\FunctionTok{acf}\NormalTok{(E, }\AttributeTok{lag.max=}\DecValTok{12}\SpecialCharTok{*}\DecValTok{5}\NormalTok{)}
-
-
-\FunctionTok{bind\_rows}\NormalTok{(}
-\NormalTok{  tseries}\SpecialCharTok{::}\FunctionTok{kpss.test}\NormalTok{(E) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{tidy}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{parameter),}
-  \FunctionTok{Box.test}\NormalTok{(E, }\AttributeTok{lag =} \DecValTok{20}\NormalTok{, }\AttributeTok{type =} \StringTok{"Ljung{-}Box"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{tidy}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{parameter)}
-  
-  \FunctionTok{auto.arima}\NormalTok{(serie}\SpecialCharTok{$}\NormalTok{x, }\AttributeTok{d =} \DecValTok{2}\NormalTok{, }\AttributeTok{D =} \DecValTok{0}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
 
 
 

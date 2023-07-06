@@ -25,7 +25,10 @@ execute:
 ```{r pacotes}
 if(!("pacman" %in% installed.packages())){install.packages("pacman")}
 
-pacman::p_load(Mcomp, tidyverse, forecast, fpp2, xts, tseries, tidymodels)
+pacman::p_load(Mcomp, tidyverse, forecast, fpp2, xts, tseries, tidymodels, kableExtra)
+
+# #funcao not in para facilitar filtragens
+# `%notin%` <- Negate(`%in%`)
 ```
 
 ```{r selecao-dados}
@@ -55,11 +58,7 @@ A série aparenta ter dois períodos, pelo menos: um ciclo anual e outro que com
 * **Adicionando uma componente sazonal com ciclo menor que 1 ano** -- uma das componentes sazonais apresenta heteroscedasticidade;
 * **Adicionando uma componente sazonal com ciclo maior que 1 ano** -- resíduos apresentam periodicidade ou heteroscedasticidade.
 
-Optou-se portanto pela decomposição STL apenas com a sazonalidade anual, mas fica evidente que esta decomposição não é adequada quando se avalia a componente de tendência. A decomposição é exposta a seguir.  
-
-
 ```{r decomposicao-mstl}
-
 serie_ms <- forecast::msts(dados, seasonal.periods = c(12))
 
 # media dos resíduos é em torno de 5. Considerando a magnitude dos dados que temos usando summary(dados), está próximo de zero o suficiente
@@ -70,9 +69,22 @@ decomp_mstl <- mstl(serie_ms, lambda = NULL, t.window = 9)
 
 #ajustar com lambda = "auto" até agora não parece fazer qualquer diferença
 
-decomp_mstl %>% autoplot(main = "Decomposição MSTL com período anual simples")
+```
+
+
+Optou-se portanto pela decomposição STL (apesar de os dados terem inicialmente formado um objeto `msts`) apenas com a sazonalidade anual, mas fica evidente que esta decomposição não é adequada quando se avalia a componente de tendência, que aparenta ainda carregar algum componente periódico. Os resíduos aparentam um comportamento aleatório e têm média `r round(mean(decomp_mstl[,4]),3)`, o que é próximo de zero o suficiente considerando a magnitude dos dados da série. A decomposição é exposta a seguir.  
+
+
+```{r grafico-mstl}
+
+decomp_mstl %>% autoplot(main = "Decomposição MSTL com período anual simples") + labs(x = "Ano") + theme_bw()
 
 ```
+
+
+
+
+# Modelos ARIMA: seleção, transformações e resíduos
 
 COMENTAR
 - para que serve diff normal e sazonal
@@ -92,14 +104,186 @@ serie_ms_diff <- serie_ms %>% diff() %>% diff(lag = 12)
 
 ```
 
-
-# Modelos ARIMA: seleção, transformações e resíduos
-
 - ACf e PACF
 - Construção do modelo
 - Resíduos
 
 # Modelos ETS: seleção, transformações e resíduos
+
+## Modelo sem transformação
+
+### Seleção
+
+```{r selecao-ETS-sem-transf}
+# monta as combinações possíveis de modelo ets
+model <- expand_grid(v1 = c("A", "M", "N"), v2 = c("A", "M", "N"), v3 = c("A", "M", "N")) %>%
+  mutate(modelo = str_c(v1,v2,v3)) %>%
+  select(modelo) %>%
+  unique() %>%
+  expand_grid(., damp = c(TRUE, FALSE))
+# N, A, M, + damped
+
+
+#funcao pra montar indicadores do modelo
+criterios <- function(modelo, damp) { 
+  ETS <- ets(dados, model = modelo, damped = damp)
+  #usamos o objeto dados como um padrao
+  
+  tabela <- tibble(
+    nome = modelo,
+    sigla = str_c("ETS(", str_c(substr(modelo,1,1),  substr(modelo,2,2), substr(modelo,3,3), sep = ","), ")"),
+    damped = damp,
+    AIC = ETS$aic, 
+    AICc = ETS$aicc, 
+    BIC = ETS$bic)
+  
+  return(tabela)
+}
+
+
+#selecionando modelos permitidos pela funcao ets
+# for(i in 1:length(model$modelo)){
+#   print(i)
+#   print(try({ets(dados, model = model$modelo[i], damped = model$damp[i])}, silent = TRUE))
+# }
+
+selecionados <- c(1, 2, 5, 6, 14, 18:24, 27:30, 32, 34, 36)
+
+model_select <- model[selecionados,]
+
+tabela_modelos_ETS <- map2_df(model_select$modelo, model_select$damp, criterios) %>%
+  arrange(AIC) %>%
+  mutate(modelo = case_when(
+    damped == TRUE ~ str_replace(sigla, "A", "Ad"),
+    .default = sigla
+  ))
+
+tabela_modelos_ETS %>%
+  select("Modelo"= modelo, AIC:BIC)%>%
+  head(10) %>%
+  knitr::kable(
+    format = "latex",
+    align = c("lccc"),
+    booktabs = TRUE,
+    longtable = TRUE,
+    linesep = "",
+    escape = FALSE,
+    digits = 2
+    ) %>%
+  kableExtra::kable_styling(
+      position = "center",
+      latex_options = c("striped", "repeat_header"),
+      stripe_color = "gray!15")
+
+```
+
+```{r melhor-fit-ETL-sem-transf}
+
+# decomposicao ETS sem transformacao ----
+fit_ets <- ets(dados, model = "MAM", damped = TRUE)
+
+plot(fit_ets)
+
+```
+
+
+### Resíduos
+
+```{r residuos-ets-sem-transform}
+
+#ESSE É O CODIGO DO TRABALHO QUE CONSEGUIMOS, TEM QUE TROCAR OS OBJETOS
+
+# Análise de resíduos ETS sem transformação
+# E <- fit1$residuals
+# par(mfrow=c(2,2))
+# plot(E)
+# acf(E)
+# pacf(E)
+# qqnorm(E)
+# qqline(E)
+# # Testes para ETS sem transformação
+# p_valor <- c(shapiro.test(E)$p.value,kpss.test(E)$p.value,
+# Box.test(E,lag=15,type="Ljung-Box",fitdf=3)$p.value)
+# Estatistica <- c(shapiro.test(E)$statistic,kpss.test(E)$statistic,
+# Box.test(E,lag=15,type="Ljung-Box",fitdf=3)$statistic)
+# Teste <- c("Normalidade","Estacionariedade","Independencia")
+# d <- data.frame(Estatistica,p_valor)
+# knitr::kable(d)
+```
+
+
+
+## Modelo com transformação
+
+### Seleção
+
+a série com transformacao
+
+```{r ETS-com-transf}
+# avalia valor de lambda da transformacao boxcox
+lambda <- dados %>% BoxCox.lambda()
+
+dados_box <- dados %>% BoxCox(lambda)
+
+# visualização e decomp da ETS com transformação
+plot(dados_box,main= parse(text = paste0('"Série com transformação Box-Cox  "', '~ lambda == ', round(lambda, 3))))
+
+```
+
+decomposicao
+
+```{r decomposicao-ets-com-transformacao}
+mstl(dados_box)%>%plot(main = "Decomposição da série com transformação Box-Cox")
+```
+selecao do modelo com transformação
+
+```{r selecao-ETS-com-transformacao}
+# for(i in 1:length(model$modelo)){
+#   print(i)
+#   print(try({ets(dados_box, model = model$modelo[i], damped = model$damp[i])}, silent = TRUE))
+# }
+
+selecionados_transf <- c(1, 2, 5, 6, 14, 18, 19:24, 27:30, 32, 34, 36)
+
+model_select_transf <- model[selecionados_transf,]
+
+tabela_modelos_ETS_transf <- map2_df(model_select_transf$modelo, model_select_transf$damp, criterios) %>%
+  arrange(AIC) %>%
+  mutate(modelo = case_when(
+    damped == TRUE ~ str_replace(sigla, "A", "Ad"),
+    .default = sigla
+  ))
+
+tabela_modelos_ETS_transf %>%
+  select("Modelo transformado"= modelo, AIC:BIC)%>%
+  head(10) %>%
+  knitr::kable(
+    format = "latex",
+    align = c("lccc"),
+    booktabs = TRUE,
+    longtable = TRUE,
+    linesep = "",
+    escape = FALSE,
+    digits = 2
+    ) %>%
+  kableExtra::kable_styling(
+      position = "center",
+      latex_options = c("striped", "repeat_header"),
+      stripe_color = "gray!15")
+```
+
+OS MODELOS SAO OS MESMO, PODEMO SELECIONAR O SEGUNDO MELHOR
+
+
+### Resíduos
+
+```{r resíduos-modelo-transformado}
+
+
+
+```
+
+
 
 # Estudo de desempenho preditivo
 
@@ -120,86 +304,5 @@ apresente em tabelas e gráficos as previsões dos 4 modelos selecionados e tamb
 Todo o projeto de composição deste documento pode ser encontrado aqui: https://github.com/cesar-galvao/trabalhos_series
 
 ```{r codigo, eval = FALSE, echo = TRUE}
-
-pacman::p_load(Mcomp, tidyverse, forecast, fpp2, xts, tseries, tidymodels)
-
-data(M3) #carrega os dados
-id <- 2546 #série temporal escolhida
-
-serie <- M3[[id]]
-
-dados <- serie$x
-
-plot(serie, main = "Série Temporal M3-2546")
-
-serie$x %>% 
-  stl(s.window = 7, t.window = 7) %>%
-  plot(main = "Decomposição STL (LOESS)")
-
-#sazonalidade diaria e semanal
-msts(serie$x, seasonal.periods = c(12, 6))%>%
-#janela de ajuste 'Cleveland et al (1990)'
-  mstl(., s.window = 7, t.window = 7) %>% plot(main = "Decomposição MSTL")
-
-d <- ndiffs(serie$x)
-
-D <- serie$x %>% diff() %>% nsdiffs()
-
-#aplica 2 diferenciacoes
-serie_d <- serie$x %>% diff(differences = 2)
-
-kpss.test(serie_d)
-
-par(mfrow = c(1, 3))
-plot(serie_d)
-acf(serie_d, lag.max = 12*7)
-pacf(serie_d, lag.max = 12*7)
-
-parcim <- character()
-
-melhor_AICc <- Inf
-for(p in 0:2){
-  for(q in 0:2){
-    for(P in 0:1){
-      for(Q in 0:1){
-        fit <- Arima(serie$x, order = c(p,2,q), seasonal = c(P, 0, Q))
-        if(fit$aicc < melhor_AICc){
-          melhor_AICc <- fit$aicc
-          parcim <- c(paste0("p = ",p,", q = ", q, ", P = ", P, ", Q = ", Q,
-                             ", AICc = ", round(fit$aicc,4)),parcim)
-        }
-      }
-    }
-  }
-}
-
-
-
-parcim
-
-
-fit <- arima(serie$x, order = c(0,2,1), seasonal = c(1,0,0), method = "CSS")
-
-fit$coef %>% tidy()
-
-
-par(mfrow=c(1,2))
-E <- fit$residuals %>% window(start=c(1984,3))
-E1 <- fit$residuals
-plot(E1)
-plot(E, main = "Processo dos resíduos")
-
-par(mfrow=c(1,3))
-plot(E)
-qqnorm(E)
-qqline(E)
-acf(E, lag.max=12*5)
-
-
-bind_rows(
-  tseries::kpss.test(E) %>% tidy() %>% select(-parameter),
-  Box.test(E, lag = 20, type = "Ljung-Box")%>% tidy() %>% select(-parameter)
-  
-  auto.arima(serie$x, d = 2, D = 0)
 
 ```
