@@ -92,14 +92,18 @@ COMENTAR
 - teste de estacionariedade
 - deixar pronto para a modelagem
 
-```{r diff-acf-pacf}
+## Modelo sem transformação
+
+### Seleção
+
+```{r diff-arima}
 ndiffs(serie_ms)
 serie_ms %>% diff() %>% nsdiffs()
 
 serie_ms_diff <- serie_ms %>% diff() %>% diff(lag = 12)
 ```
 
-```{r acf-pacf}
+```{r acf-pacf-sem-transformacao, fig.height=3, fig.width = 8}
 # Graficos de Autocorrelacao
 par(mfrow=c(1,3))
 plot(serie_ms_diff, main="Série com diferenças",ylab="")
@@ -107,7 +111,7 @@ acf(serie_ms_diff, lag=12*6, main="ACF")
 pacf(serie_ms_diff, lag=12*6, main="PACF")
 ```
 
-```{r aicc}
+```{r aicc-sem-transformacao}
 melhor_AICc <- Inf
 for(p in 0:2){
   for(q in 0:2){
@@ -135,14 +139,30 @@ melhor_AICc
 
 O modelo selecionado foi ARIMA(2,1,2)x(0,1,2) para a série original e com transformação de Box-Cox.
 
-```{r testes}
-#kpss estacionariedade
+
+### Resíduos
+
+
+## Modelo com transformação
+
+### Seleção
+
+```{r transformacao}
 
 ```
 
-- ACf e PACF
-- Construção do modelo
-- Resíduos
+```{r acf-pacf-transformado}
+
+```
+
+```{r aicc-transformado}
+
+```
+
+
+
+### Resíduos
+
 
 # Modelos ETS: seleção, transformações e resíduos
 

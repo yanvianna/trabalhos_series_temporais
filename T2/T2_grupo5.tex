@@ -177,7 +177,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, frame hidden, breakable, enhanced, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, breakable, frame hidden, interior hidden, boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -234,15 +234,22 @@ COMENTAR - para que serve diff normal e sazonal - o que conseguimos
 depois de aplicar - teste de estacionariedade - deixar pronto para a
 modelagem
 
-\begin{verbatim}
-[1] 1
-\end{verbatim}
+\hypertarget{modelo-sem-transformauxe7uxe3o}{%
+\subsection{Modelo sem
+transformação}\label{modelo-sem-transformauxe7uxe3o}}
+
+\hypertarget{seleuxe7uxe3o}{%
+\subsubsection{Seleção}\label{seleuxe7uxe3o}}
 
 \begin{verbatim}
 [1] 1
 \end{verbatim}
 
-\includegraphics{T2_grupo5_files/figure-pdf/acf-pacf-1.pdf}
+\begin{verbatim}
+[1] 1
+\end{verbatim}
+
+\includegraphics{T2_grupo5_files/figure-pdf/acf-pacf-sem-transformacao-1.pdf}
 
 \begin{verbatim}
  non-finite finite-difference value [1] 
@@ -261,26 +268,29 @@ modelagem
 O modelo selecionado foi ARIMA(2,1,2)x(0,1,2) para a série original e
 com transformação de Box-Cox.
 
-\begin{itemize}
-\tightlist
-\item
-  ACf e PACF
-\item
-  Construção do modelo
-\item
-  Resíduos
-\end{itemize}
+\hypertarget{resuxedduos}{%
+\subsubsection{Resíduos}\label{resuxedduos}}
+
+\hypertarget{modelo-com-transformauxe7uxe3o}{%
+\subsection{Modelo com
+transformação}\label{modelo-com-transformauxe7uxe3o}}
+
+\hypertarget{seleuxe7uxe3o-1}{%
+\subsubsection{Seleção}\label{seleuxe7uxe3o-1}}
+
+\hypertarget{resuxedduos-1}{%
+\subsubsection{Resíduos}\label{resuxedduos-1}}
 
 \hypertarget{modelos-ets-seleuxe7uxe3o-transformauxe7uxf5es-e-resuxedduos}{%
 \section{Modelos ETS: seleção, transformações e
 resíduos}\label{modelos-ets-seleuxe7uxe3o-transformauxe7uxf5es-e-resuxedduos}}
 
-\hypertarget{modelo-sem-transformauxe7uxe3o}{%
+\hypertarget{modelo-sem-transformauxe7uxe3o-1}{%
 \subsection{Modelo sem
-transformação}\label{modelo-sem-transformauxe7uxe3o}}
+transformação}\label{modelo-sem-transformauxe7uxe3o-1}}
 
-\hypertarget{seleuxe7uxe3o}{%
-\subsubsection{Seleção}\label{seleuxe7uxe3o}}
+\hypertarget{seleuxe7uxe3o-2}{%
+\subsubsection{Seleção}\label{seleuxe7uxe3o-2}}
 
 \begin{longtable*}{lccc}
 \toprule
@@ -310,15 +320,15 @@ ETS(M,N,M) & 1827.18 & 1831.98 & 1868.48\\*
 
 \includegraphics{T2_grupo5_files/figure-pdf/melhor-fit-ETL-sem-transf-1.pdf}
 
-\hypertarget{resuxedduos}{%
-\subsubsection{Resíduos}\label{resuxedduos}}
+\hypertarget{resuxedduos-2}{%
+\subsubsection{Resíduos}\label{resuxedduos-2}}
 
-\hypertarget{modelo-com-transformauxe7uxe3o}{%
+\hypertarget{modelo-com-transformauxe7uxe3o-1}{%
 \subsection{Modelo com
-transformação}\label{modelo-com-transformauxe7uxe3o}}
+transformação}\label{modelo-com-transformauxe7uxe3o-1}}
 
-\hypertarget{seleuxe7uxe3o-1}{%
-\subsubsection{Seleção}\label{seleuxe7uxe3o-1}}
+\hypertarget{seleuxe7uxe3o-3}{%
+\subsubsection{Seleção}\label{seleuxe7uxe3o-3}}
 
 a série com transformacao
 
@@ -358,8 +368,8 @@ ETS(M,N,M) & 1827.18 & 1831.98 & 1868.48\\*
 
 OS MODELOS SAO OS MESMO, PODEMO SELECIONAR O SEGUNDO MELHOR
 
-\hypertarget{resuxedduos-1}{%
-\subsubsection{Resíduos}\label{resuxedduos-1}}
+\hypertarget{resuxedduos-3}{%
+\subsubsection{Resíduos}\label{resuxedduos-3}}
 
 \hypertarget{estudo-de-desempenho-preditivo}{%
 \section{Estudo de desempenho
