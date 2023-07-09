@@ -148,15 +148,44 @@ O modelo selecionado foi ARIMA(2,1,2)x(0,1,2) para a série original e com trans
 ### Seleção
 
 ```{r transformacao}
+autolambda <- BoxCox.lambda(dados)
+dadosbc <- BoxCox(dados, lambda=autolambda)
+par(mfrow=c(1,2))
+plot(dados, main='Série Original',ylab='')
+plot(dadosbc, main='Box-Cox',ylab='')
+```
 
+```{r diff-arima-transformado}
+ndiffs(dadosbc)
+dadosbc %>% diff() %>% nsdiffs()
+dadosbctransf <- dadosbc %>% diff() %>% diff(lag = 12)
 ```
 
 ```{r acf-pacf-transformado}
-
+par(mfrow=c(1,3))
+plot(dadosbctransf, main="Série (boxcox) com diferenças",ylab="")
+acf(dadosbctransf, lag=12*6, main="ACF")
+pacf(dadosbctransf, lag=12*6, main="PACF")
 ```
 
 ```{r aicc-transformado}
+melhor_AICc <- Inf
+for(p in 0:2){
+  for(q in 0:2){
+    for(P in 0:2){
+      for(Q in 0:2){
+        cat("p =",p,", q =",q,", P =",P,", Q =",Q,"\n")
+        tryCatch({fit <- Arima(dadosbc, order=c(p,1,q), seasonal=c(P,1,Q))}, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+        if(fit$aicc <= melhor_AICc){
+          melhor_AICc <- fit$aicc
+          cat("p =",p,", q =",q,", P =",P,", Q =",Q,", AICc =",fit$aicc,"\n")}
+        
+      }
+    }
+  }
+}
 
+melhor_AICc
 ```
 
 
